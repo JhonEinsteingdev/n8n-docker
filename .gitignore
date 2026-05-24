@@ -4,7 +4,10 @@
 
 # ── Datos locales de n8n (bind mount, si alguna vez se usa) ───────────────────
 n8n_data/
-workflows-backup.json
+
+# ── Backups y exports locales de n8n (pueden contener datos sensibles) ────────
+backups/
+workflows/*.json
 
 # ── Overrides locales de compose ──────────────────────────────────────────────
 docker-compose.override.yml

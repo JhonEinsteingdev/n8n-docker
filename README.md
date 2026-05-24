@@ -10,6 +10,7 @@
 - [Workflows activos](#workflows-activos)
 - [Integraciones configuradas](#integraciones-configuradas)
 - [Datos y backups](#datos-y-backups)
+- [Workflows versionados](#workflows-versionados)
 - [Solución de problemas](#solución-de-problemas)
 
 ---
@@ -46,6 +47,10 @@ cp .env.example .env
 ### 3. Levantar el servicio
 
 ```bash
+# Opción A — script automático (recomendado para la primera vez)
+bash setup.sh
+
+# Opción B — manual
 podman-compose up -d
 ```
 
@@ -115,6 +120,67 @@ podman cp n8n:/home/node/.n8n/workflows.json ./workflows-backup.json
 
 ```bash
 podman volume inspect n8n_data
+```
+
+---
+
+## Workflows versionados
+
+Los workflows exportados viven en `workflows/workflows.json` y se versionar
+junto con el repo. Para mantenerlos actualizados:
+
+```bash
+# Exportar el estado actual de n8n → workflows/workflows.json
+bash backup.sh
+
+# Commitear los cambios
+git add workflows/workflows.json
+git commit -m "chore: actualizar workflows"
+```
+
+### Restaurar workflows en una instalación nueva
+
+```bash
+podman exec -i n8n n8n import:workflow --input=/home/node/.n8n/workflows_export.json
+# O copiando primero el archivo:
+podman cp workflows/workflows.json n8n:/home/node/.n8n/workflows_export.json
+podman exec n8n n8n import:workflow --input=/home/node/.n8n/workflows_export.json
+```
+
+### Backup completo con credenciales
+
+```bash
+# Genera backups/n8n_backup_FECHA.tar.gz (en .gitignore, nunca al repo)
+bash backup.sh --with-credentials
+```
+
+---
+
+## Workflows versionados
+
+Los exports viven en `workflows/` — la carpeta está en el repo pero los `.json`
+están en `.gitignore`, así que nunca se suben al repositorio.
+
+### Exportar el estado actual de n8n
+
+```bash
+bash backup.sh
+# → genera workflows/workflows.json (solo local)
+```
+
+### Restaurar workflows en una instalación nueva
+
+```bash
+# Copiar el JSON al contenedor e importar
+podman cp workflows/workflows.json n8n:/home/node/.n8n/workflows_export.json
+podman exec n8n n8n import:workflow --input=/home/node/.n8n/workflows_export.json
+```
+
+### Backup completo con credenciales
+
+```bash
+# Genera backups/n8n_backup_FECHA.tar.gz (también en .gitignore)
+bash backup.sh --with-credentials
 ```
 
 ---
