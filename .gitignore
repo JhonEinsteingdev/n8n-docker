@@ -1,0 +1,25 @@
+# ── Credenciales y entorno ─────────────────────────────────────────────────────
+.env
+*.env.local
+
+# ── Datos locales de n8n (bind mount, si alguna vez se usa) ───────────────────
+n8n_data/
+workflows-backup.json
+
+# ── Overrides locales de compose ──────────────────────────────────────────────
+docker-compose.override.yml
+podman-compose.override.yml
+
+# ── Editores ──────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── Sistema operativo ─────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Logs ──────────────────────────────────────────────────────────────────────
+*.log

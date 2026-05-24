@@ -1,0 +1,16 @@
+services:
+  n8n:
+    image: docker.io/n8nio/n8n
+    container_name: n8n
+    ports:
+      - "${N8N_PORT:-5678}:5678"
+    volumes:
+      - n8n_data:/home/node/.n8n:Z
+    restart: unless-stopped
+    env_file:
+      - path: .env
+        required: false   # no falla si no existe el archivo
+
+volumes:
+  n8n_data:
+    external: true
